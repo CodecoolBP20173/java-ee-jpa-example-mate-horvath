@@ -13,7 +13,7 @@ import java.util.Date;
 
 public class JPAExample {
 
-    public static void populateDb(EntityManager em) {
+    private static void populateDb(EntityManager em) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date birthDate1 = Calendar.getInstance().getTime();
         Date birthDate2 = Calendar.getInstance().getTime();
@@ -24,27 +24,30 @@ public class JPAExample {
             e.printStackTrace();
         }
 
-        Klass classBp2 = new Klass("Budapest 2016-2");
+        Klass classBp2 = new Klass("Budapest 2016-2", CCLocation.BUDAPEST);
         Address address = new Address("Hungary", "1234", "Budapest", "Macskakő út 5.");
-        Student student = new Student("Ödön", "odon@tokodon.hu", birthDate1, address);
+        Student student = new Student("Ödön", "odon@tokodon.hu", birthDate1, address, "06301111111");
         classBp2.addStudent(student);
 
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.persist(address);
         em.persist(student);
+        em.persist(classBp2);
         transaction.commit();
         System.out.println("Ödön saved.");
 
         Address address2 = new Address("Hungary", "6789", "Budapest", "Harap u. 3.");
-        Student student2 = new Student("Aladár", "ktyfl@gmail.com", birthDate2, address);
+        Student student2 = new Student("Aladár", "ktyfl@gmail.com", birthDate2, address2, "06302222222");
         classBp2.addStudent(student2);
 
         transaction.begin();
         em.persist(student2);
         em.persist(address2);
+        em.persist(classBp2);
         transaction.commit();
         System.out.println("Aladár saved.");
+
     }
 
     public static void main(String[] args) {
@@ -71,7 +74,6 @@ public class JPAExample {
         Address foundAddress2 = em.find(Address.class, 2L);
         System.out.println("--Found address #2");
         System.out.println("----address----" + foundAddress2.getAddr());
-
         em.close();
         emf.close();
 
