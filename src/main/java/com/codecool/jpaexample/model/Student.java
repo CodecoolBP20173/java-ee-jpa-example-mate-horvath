@@ -19,7 +19,8 @@ public class Student {
     private Date dateOfBirth;
 
     @ElementCollection
-    private static List<String> phoneNumbers = new ArrayList<>();
+    @CollectionTable(name = "phone")
+    private List<String> phoneNumbers = new ArrayList<>();
 
     @Transient
     private long age;
@@ -39,7 +40,7 @@ public class Student {
         this.dateOfBirth = dateOfBirth;
         this.age = (Calendar.getInstance().getTimeInMillis() - dateOfBirth.getTime())
                 / (60L * 60L * 1000L * 24L * 365L);
-        phoneNumbers.add(phoneNumber);
+        this.phoneNumbers.add(phoneNumber);
     }
 
     public Student(String name, String email, Date dateOfBirth, Address address, String phoneNumber) {
